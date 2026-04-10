@@ -22,8 +22,5 @@ jobs:
       - name: Start local Supabase stack
         run: supabase start
 
-      - name: Apply migrations to local test DB
-        run: supabase db reset --local --no-seed
-
       - name: Lint database schema
         run: supabase db lint --local --schema public --fail-on error
