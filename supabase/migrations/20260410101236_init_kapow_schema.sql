@@ -106,6 +106,26 @@ for delete
 to anon, authenticated
 using (true);
 
-alter publication supabase_realtime add table public.rooms;
-alter publication supabase_realtime add table public.queue;
-alter publication supabase_realtime add table public.votes;
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and tablename = 'rooms'
+  ) then
+    alter publication supabase_realtime add table public.rooms;
+  end if;
+
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and tablename = 'queue'
+  ) then
+    alter publication supabase_realtime add table public.queue;
+  end if;
+
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and tablename = 'votes'
+  ) then
+    alter publication supabase_realtime add table public.votes;
+  end if;
+end $$;
