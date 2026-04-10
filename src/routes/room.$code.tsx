@@ -150,7 +150,7 @@ function GuestRoomPage() {
 		return () => {
 			window.clearTimeout(timeoutId);
 		};
-	}, [search, searchMutation]);
+	}, [search, searchMutation.mutate]);
 
 	if (roomQuery.isPending) {
 		return (

@@ -26,6 +26,8 @@ export function useRoomLiveQuery(code: string, hostToken?: string) {
 		refetchOnWindowFocus: false,
 	});
 
+	const queueIdsKey = query.data?.queue.map((item) => item.id).join(",") ?? "";
+
 	useEffect(() => {
 		if (!query.data?.room.id) {
 			return;
@@ -33,7 +35,7 @@ export function useRoomLiveQuery(code: string, hostToken?: string) {
 
 		const supabase = getSupabaseBrowserClient();
 		const roomId = query.data.room.id;
-		const queueIds = query.data.queue.map((item) => item.id);
+		const queueIds = queueIdsKey ? queueIdsKey.split(",") : [];
 		const channel = supabase.channel(
 			`kapow-room-${roomId}-${hostToken ?? "guest"}`,
 		);
@@ -82,7 +84,7 @@ export function useRoomLiveQuery(code: string, hostToken?: string) {
 		return () => {
 			void supabase.removeChannel(channel);
 		};
-	}, [code, hostToken, query.data?.queue, query.data?.room.id, queryClient]);
+	}, [code, hostToken, queueIdsKey, query.data?.room.id, queryClient]);
 
 	return query;
 }
