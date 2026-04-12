@@ -353,9 +353,11 @@ export const searchYouTube = createServerFn({ method: "GET" })
 
 		const results = await fetchYouTubeResults(data.query);
 
-		await supabase
-			.from("search_cache")
-			.upsert({ query: cacheKey, results, created_at: new Date().toISOString() });
+		await supabase.from("search_cache").upsert({
+			query: cacheKey,
+			results,
+			created_at: new Date().toISOString(),
+		});
 
 		return results;
 	});
